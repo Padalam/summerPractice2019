@@ -13,7 +13,7 @@ public abstract class AbstractGraph {
 
     abstract public boolean addEdge(Edge e);
 
-    abstract public boolean removeVertex(Vertex v);
+    abstract public boolean removeVertex(int v);
 
     abstract public boolean removeEdge(Edge e);
 

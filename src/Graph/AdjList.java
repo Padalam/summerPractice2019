@@ -68,23 +68,27 @@ public class AdjList extends AbstractGraph {
     }
 
     @Override
-    public boolean removeVertex(Vertex v) {
-        if (!adjList.contains(v)) return false;
+    public boolean removeVertex(int v) {
+	Vertex toRemove = new Vertex(v);
+        if (!adjList.contains(toRemove))
+	{
+		return false;
+	}
 
-        adjList.remove(v);
+	for (Integer vert : adjList.get(adjList.indexOf(toRemove)).edge.keySet())
+	{
+		adjList.get(adjList.indexOf(new Vertex(vert.intValue()))).edge.remove(toRemove.v);
+	}
+
+        adjList.remove(toRemove);
         return true;
     }
 
     @Override
     public boolean removeEdge(Edge e) {
+	removeVertex(e.v1);
+	removeVertex(e.v2);
 
-/*        if (!adjList.contains(new Vertex(e.v1))) return false;
-        if (!adjList.containsKey(e.v2)) return false;
-        if (!adjList.get(e.v1).way.containsKey(e.v2)) return false;
-
-        adjList.get(e.v1).way.remove(e.v2);
-        adjList.get(e.v2).way.remove(e.v1);
-*/
         return true;
     }
 
