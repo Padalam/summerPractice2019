@@ -12,14 +12,20 @@ public class Vertex {
         @Override
         public boolean equals(Object other) {
             if (!(other instanceof Vertex))
-                return false;
+	    {
+                 return false;
+	    }
 
             Vertex vert = (Vertex) other;
 
             if (vert.v == this.v)
+	    {
                 return true;
+	    }
             else
+	    {
                 return false;
+	    }
         }
 
 }

@@ -3,9 +3,13 @@ import Boruvki.*;
 
 public class Main {
     public static void main(String[] arg) {
-        Boruvki ob = new Boruvki();
+	AdjList list = new AdjList();
 
-        ob.makeGraphAndInit();
-        ob.boruvki();
+	list.readGraph();
+	list.showGraph();
+	System.out.println("\nremoved:\n");
+	list.removeVertex(1);
+	list.showGraph();
+
     }
 }
