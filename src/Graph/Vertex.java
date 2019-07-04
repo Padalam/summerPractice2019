@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class Vertex {
         public int v;
-        public HashMap < Integer, Integer > way = new HashMap < Integer, Integer > ();
+        public HashMap < Integer, Integer > edge = new HashMap < Integer, Integer > ();
 
         public Vertex(int v) {
             this.v = v;

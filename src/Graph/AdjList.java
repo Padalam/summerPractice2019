@@ -8,7 +8,7 @@ import java.util.Scanner;
 // Представление в виде списка смежности
 public class AdjList extends AbstractGraph {
 
-    private HashMap < Integer, Vertex > adjList = new HashMap < Integer, Vertex > ();
+    private ArrayList < Vertex > adjList = new ArrayList < Vertex > ();
 
     // кривовато
     public void readGraph() {
@@ -30,71 +30,73 @@ public class AdjList extends AbstractGraph {
 
     public void showGraph() {
 
-        for (Vertex vert: adjList.values()) {
+        for (Vertex vert: adjList) {
             System.out.println("vertex: " + vert.v);
-            for (Integer neighbour: vert.way.keySet()) {
-                System.out.println("[neighbour: " + neighbour + ", edge: " + vert.way.get(neighbour) + "]");
+            for (Integer neighbour: vert.edge.keySet()) {
+                System.out.println("[neighbour: " + neighbour + ", edge: " + vert.edge.get(neighbour) + "]");
             }
         }
     }
 
     @Override
     public boolean addVertex(int v) {
-        if (adjList.containsKey(v)) return false;
+        if (adjList.contains(new Vertex(v))) return false;
 
-        adjList.put(v, new Vertex(v));
+        adjList.add(new Vertex(v));
         return true;
     }
 
     @Override
     public boolean addEdge(Edge e) {
 
-        if (!adjList.containsKey(e.v1)) {
+        if (!adjList.contains(new Vertex(e.v1))) {
             addVertex(e.v1);
         }
 
-        if (!adjList.containsKey(e.v2)) {
-            addVertex(e.v2);
-        }
 
-        if (adjList.get(e.v1).way.containsKey(e.v2)) return false;
+	if (!adjList.contains(new Vertex(e.v2))) {
+	    addVertex(e.v2);
+	}
 
-        adjList.get(e.v1).way.put(e.v2, e.weight);
-        adjList.get(e.v2).way.put(e.v1, e.weight);
+        if (adjList.get(adjList.indexOf(new Vertex(e.v1))).edge.containsKey(e.v2)) return false;
+
+
+        adjList.get(adjList.indexOf(new Vertex(e.v1))).edge.put(e.v2, e.weight);
+        adjList.get(adjList.indexOf(new Vertex(e.v2))).edge.put(e.v1, e.weight);
 
         return true;
     }
 
     @Override
     public boolean removeVertex(Vertex v) {
-        if (!adjList.containsKey(v.v)) return false;
+        if (!adjList.contains(v)) return false;
 
-        adjList.remove(v.v);
+        adjList.remove(v);
         return true;
     }
 
     @Override
     public boolean removeEdge(Edge e) {
 
-        if (!adjList.containsKey(e.v1)) return false;
+/*        if (!adjList.contains(new Vertex(e.v1))) return false;
         if (!adjList.containsKey(e.v2)) return false;
         if (!adjList.get(e.v1).way.containsKey(e.v2)) return false;
 
         adjList.get(e.v1).way.remove(e.v2);
         adjList.get(e.v2).way.remove(e.v1);
-
+*/
         return true;
     }
 
     @Override
     public Vertex isExistV(int v) {
-        return adjList.get(v);
+        return adjList.get(adjList.indexOf(new Vertex(v)));
     }
 
     @Override
     public Edge isExistE(int v1, int v2) {
         if (isExistV(v1) != null && isExistV(v2) != null) {
-            Integer i = adjList.get(v1).way.get(v2);
+            Integer i = adjList.get(adjList.indexOf(new Vertex(v1))).edge.get(v2);
 
             return i == null ? null : new Edge(v1, v2, i.intValue());
         }
@@ -104,15 +106,15 @@ public class AdjList extends AbstractGraph {
 
     @Override
     public void clear() {
-        adjList = new HashMap < Integer, Vertex > ();
+        adjList = new ArrayList < Vertex > ();
     }
 
     @Override
     public ArrayList < Integer > getVertexes() {
         ArrayList < Integer > verts = new ArrayList < Integer > ();
 
-        for (Integer vert: adjList.keySet()) {
-            verts.add(vert);
+        for (Vertex vert: adjList) {
+            verts.add(vert.v);
         }
 
         return verts;
@@ -122,8 +124,8 @@ public class AdjList extends AbstractGraph {
     public ArrayList < Edge > getEdges() {
         ArrayList < Edge > edges = new ArrayList < Edge > ();
 
-        for (Vertex vert: adjList.values()) {
-            for (Map.Entry edge: vert.way.entrySet()) {
+        for (Vertex vert: adjList) {
+            for (Map.Entry edge: vert.edge.entrySet()) {
                 Edge isDuple = new Edge((int) edge.getKey(), vert.v, (int) edge.getValue());
 
                 if (!edges.contains(isDuple)) {

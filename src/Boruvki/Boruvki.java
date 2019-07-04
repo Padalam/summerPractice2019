@@ -10,7 +10,7 @@ public class Boruvki {
     private AbstractGraph adjList = new AdjList();
     private AbstractGraph MST = new AdjList();
     private ArrayList < Component > components = new ArrayList < Component > ();
-    private ArrayList < AbstractGraph.Edge > edges = new ArrayList < AbstractGraph.Edge > ();
+    private ArrayList < Edge > edges = new ArrayList < Edge > ();
 
     public void makeGraphAndInit() {
         adjList.readGraph();
@@ -41,7 +41,7 @@ public class Boruvki {
 
     public void oneStep() {
         for (int i = 0; i < components.size(); i++) {
-            components.get(i).minEdge = new AbstractGraph.Edge(0, 0, 999999);
+            components.get(i).minEdge = new Edge(0, 0, 999999);
         }
 
         for (int i = 0; i < edges.size(); i++) {
@@ -79,7 +79,7 @@ public class Boruvki {
     public void setMinEdge(int comp, int v1, int v2, int edge) {
         for (int i = 0; i < components.size(); i++) {
             if (components.get(i).comp == comp)
-                components.get(i).minEdge = new AbstractGraph.Edge(v1, v2, edge);
+                components.get(i).minEdge = new Edge(v1, v2, edge);
         }
     }
 
@@ -87,7 +87,7 @@ public class Boruvki {
         passed.add(vert);
         components.get(components.indexOf(new Component(vert))).comp = comp;
 
-        for (Integer neighbour: MST.isExistV(vert).way.keySet()) {
+        for (Integer neighbour: MST.isExistV(vert).edge.keySet()) {
             if (!passed.contains(neighbour)) {
                 search(neighbour, comp, passed);
             }
@@ -113,7 +113,7 @@ public class Boruvki {
     public static class Component {
         public int vert;
         public int comp = 0;
-        public AbstractGraph.Edge minEdge = new AbstractGraph.Edge(0, 0, 999999); // sorry not sorry
+        public Edge minEdge = new Edge(0, 0, 999999); // sorry not sorry
         public Component(int v) {
             vert = v;
         }
